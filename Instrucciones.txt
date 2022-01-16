@@ -39,6 +39,7 @@
 
 	docker container ls
 
+
 #Borramos el item de curl de windows que no corresponde con el comando habitual de curl
 
 	Remove-Item alias:curl
