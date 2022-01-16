@@ -1,0 +1,16 @@
+
+#Run a bash command line  with interactive mode with docker image
+
+	docker run --interactive --tty --entrypoint /bin/bash dockertf24
+
+#Logeo en docker
+
+	docker login "path registry gitlab" -u mmartinez@autis.es
+
+#Run a bash command line  with interactive mode with docker image in repo
+
+	docker run --interactive --tty --entrypoint /bin/bash gitlab.autis.es:5050/ml-autis/mlops-svs-tool/mlops-svs-tool:latest
+
+#Free vmmen memory
+
+	cmd wsl --shutdown.

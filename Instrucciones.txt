@@ -1,0 +1,74 @@
+
+#Descargamos la imagen de tensorflow/serving
+
+	docker pull tensorflow/serving
+
+#Clonamos el repo
+
+	git clone https://github.com/tensorflow/serving.git
+
+
+#Establecemos la varibale Testdata
+
+	Set-Variable -Name "TESTDATA" -Value "$(pwd)/serving/tensorflow_serving/servables/tensorflow/testdata"
+
+
+#Imprimimos variable TESTDATA
+
+
+	$TESTDATA
+
+#Ejecutamos docker
+
+
+	docker run -t --rm -d -p 8501:8501 -v "$TESTDATA/saved_model_half_plus_two_cpu:/models/half_plus_two" -e MODEL_NAME=half_plus_two tensorflow/serving
+
+	docker run -t --rm -d -p 8501:8501 -v "G:/Mi unidad/Marc/Machine Learning/Proyectos/serving/tensorflow_serving/servables/tensorflow/testdata/saved_model_half_plus_two_cpu:/models/half_plus_two" -e MODEL_NAME=half_plus_two tensorflow/serving
+
+
+	docker run -t --rm -d -p 8501:8501 -v "$TESTDATA/resnet:/models/resnet" -e MODEL_NAME=resnet tensorflow/serving
+
+
+	docker run -t --rm -d -p 8501:8501 -v "G:/Mi unidad/Marc/Machine Learning/Proyectos/serving/tensorflow_serving/servables/tensorflow/testdata/resnet:/models/resnet" -e MODEL_NAME=resnet tensorflow/serving
+
+
+	docker run -p 8501:8501  --mount type=bind,source=$TESTDATA/resnet,target=/models/resnet -e MODEL_NAME=resnet -t tensorflow/serving
+
+
+#Listamos los containers en ejecución para ver si se ha ejecutado bien la imagen de docker
+
+	docker container ls
+
+#Borramos el item de curl de windows que no corresponde con el comando habitual de curl
+
+	Remove-Item alias:curl
+
+#Check service available
+
+	curl http://localhost:8501/v1/models/half_plus_two
+
+	curl http://localhost:8501/v1/models/resnet
+
+#Ejecutamos curl para ver si nos devuelve el container de docker las predicciones
+
+	
+
+	powershell --------- 	curl -d '{\"instances\":[1.0,2.0,5.0]}' -X POST http://localhost:8501/v1/models/half_plus_two:predict
+
+	cmd --------   		curl -d {\"instances\":[1.0,2.0,5.0]} -X POST http://localhost:8501/v1/models/half_plus_two:predict
+
+
+
+	curl -i -X POST -F "file=@image_example.jpg" http://localhost:8501/v1/models/resnet:predict
+
+	curl -v -F filename=image_example.jpg -F upload=@image_example.jpg http://localhost:8501/v1/models/resnet:predict
+
+	curl -X POST -F 'image=@cat_example.jpg' http://localhost:8501/v1/models/resnet:predict
+
+	curl -k -X POST -F image=@cat_example.jpg -v http://localhost:8501/v1/models/resnet:predict
+
+#Python request
+
+	python request_client.py F
+
+
